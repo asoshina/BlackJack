@@ -183,10 +183,15 @@ class Game:
             if player.money <= 0:
                 if isinstance(player, Player.Player):
                     clear(display_width // 2 - 185, display_height // 2 - 100, 410, 200)
-                    print_text('You spent all your money. Game over', display_width // 2 - 55, display_height // 2 - 50)
+                    print_text('You spent all your money. Game over', display_width // 2 - 115, display_height // 2 - 50)
                     wait()
+                    self.clear_info()
                     self.show_menu()
-            elif isinstance(player, Player.Bot):
+                elif isinstance(player, Player.Bot):
+                    clear(display_width // 2 - 185, display_height // 2 - 100, 410, 200)
+                    print_text(str(player.name)+' spent all his money', display_width // 2 - 100, display_height // 2 - 50, font_size=14)
+                    print_text('He\'s out of the game', display_width // 2 - 75, display_height // 2 - 30, font_size=14)
+                    wait()
                     print(player.name, 'spent all his money. He\'s out of the game')
                     self.players.remove(player)
 
@@ -245,7 +250,7 @@ class Game:
             self.check_winner()
 
             wait()
-            # self.enough_money()
+            self.enough_money()
             # self.one_more_play()
             self.restart()
             # self.init = True
