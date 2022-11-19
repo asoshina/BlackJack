@@ -16,6 +16,19 @@ def change_bet_draw():
             print_text('Please, enter a number', display_width // 2 - 70, display_height // 2, font_color='red')
 
 
+def draw_count_bot(n):
+    while True:
+        print_text('Choose bots\' count for game', display_width // 2 - 110, display_height // 2 - 125)
+        print_text(f'min = 0, max = {n - 1}', display_width // 2 - 70, display_height // 2 - 100)
+        result = get_input()
+        if result.isdigit():
+            clear(display_width // 2 - 115, display_height // 2 - 125, 400, 200)
+            return int(result)
+        else:
+            clear(display_width // 2 - 115, display_height // 2 - 125, 400, 200)
+            print_text('Please, enter a number', display_width // 2 - 90, display_height // 2, font_color='red')
+
+
 def draw_bot_bet(player):
     if player.index == 0:
         clear_rect = pygame.Rect(display_width - 180, display_height // 2 + 55, 50, 20)
@@ -248,7 +261,7 @@ def get_input():
                 # input_txt = input_txt.replace('|', '')
                 # input_tick = 30
                 if event.key == pygame.K_RETURN:
-                    return input_txt
+                    return input_txt.strip()
                     # need_input = False
                     # input_txt = ''
                 elif event.key == pygame.K_BACKSPACE:
@@ -276,6 +289,7 @@ def clear(point_x, point_y, width, height):
     pygame.draw.rect(display, 'white', clear_rect)
     pygame.display.update()
 
+
 def wait():
     flag = True
     while True and flag:
@@ -292,6 +306,3 @@ def wait():
                     quit()
         pygame.display.update()
         clock.tick(60)
-
-
-

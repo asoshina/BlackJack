@@ -19,31 +19,37 @@ class Game:
         # self.init = True
 
     def _launching(self):
-        # Определяем количество ботов
-        # while True:
-        #     bots_count = is_int(f'\nHello! You should choose bots\' count for game(min = 0, max = {self.max_pl_count - 1}) ')
-        #     if 0 <= bots_count <= self.max_pl_count - 1:
-        #         break
-        #     elif bots_count > 4:
-        #         print(f'You enter number > {self.max_pl_count - 1}. Try again')
-        #     else:
-        #         print(f'You enter number < 0. Try again')
-        bots_count = 4
+        # choose count of bots
+        while True:
+            bots_count = draw_count_bot(self.max_pl_count)
+            if 0 <= bots_count <= self.max_pl_count - 1:
+                break
+            elif bots_count > 4:
+                print_text(f'You enter number > {self.max_pl_count - 1}. Try again', display_width // 2 - 115, display_height // 2)
+            else:
+                print_text(f'You enter number < 0. Try again', display_width // 2 - 90, display_height // 2)
         self.all_players_count = bots_count + 1
-        # Создаем ботов
 
+        # Create bots and choose their place
         for i in range(bots_count):
             b = Player.Bot(i)
             self.players.append(b)
             # print(b.name, ' is created')
             # print_text(str(b.name)+' is created', 20*i, 20*i)
             # i += 1
+        self.bot_index()
         self.player = Player.Player()
         self.player_pos = 2  # random.randint(0, self.all_players_count-1)
         # print('Your position is:', self.player_pos + 1)
         # print()
         self.players.insert(self.player_pos, self.player)
         # print(self.players)
+
+    def bot_index(self):
+        if self.all_players_count == 3:
+            self.players[1].index = 4
+        elif self.all_players_count == 4:
+            self.players[1].index = 4
 
     def ask_bet(self):
         for player in self.players:
@@ -112,25 +118,25 @@ class Game:
         n = 0
         w = display_width // 2 - 70
         if self.dealer.full_points > 21:
-            print_text('Dealer are fall!', w, display_height // 2 - 100)
-            print_text('All players(full points <=21) in game are win!', w-115, display_height // 2 - 80)
+            print_text('Dealer are fall!', w, display_height // 2 - 105)
+            print_text('All players(full points <=21) in game are win!', w-50, display_height // 2 - 85, font_size=15)
             for winner in self.players:
                 h = display_height // 2 - 60 + n * 20
                 if winner.full_points <= 21:
                     winner.money += winner.bet * 2
                     if isinstance(winner, Player.Bot):
                         n += 1
-                        print_text(winner.name + ' is win!', w, h)
+                        print_text(winner.name + ' is win!', w, h, font_size=15)
                     elif isinstance(winner, Player.Player):
                         n += 1
-                        print_text('You are win!', w, h)
+                        print_text('You are win!', w, h, font_size=15)
                 else:
                     if isinstance(winner, Player.Bot):
                         n += 1
-                        print_text(winner.name + ' is lose!', w, h)
+                        print_text(winner.name + ' is lose!', w, h, font_size=15)
                     elif isinstance(winner, Player.Player):
                         n += 1
-                        print_text('You are lose!', w, h)
+                        print_text('You are lose!', w, h, font_size=15)
 
         else:
             for player in self.players:
@@ -140,31 +146,31 @@ class Game:
                     if player.full_points == self.dealer.full_points:
                         player.money += player.bet
                         n += 1
-                        print_text(f'{player.name} played in a draw!', w, h)
+                        print_text(f'{player.name} played in a draw!', w, h, font_size=15)
                     # если у игрока очков больше, чем у дилера
                     elif player.full_points > self.dealer.full_points:
                         player.money += player.bet * 2
                         if isinstance(player, Player.Bot):
                             n += 1
-                            print_text(player.name + ' is win!', w, h)
+                            print_text(player.name + ' is win!', w, h, font_size=15)
                         elif isinstance(player, Player.Player):
                             n += 1
-                            print_text('You are win!', w, h)
+                            print_text('You are win!', w, h, font_size=15)
 
                     elif player.full_points < self.dealer.full_points:
                         if isinstance(player, Player.Bot):
                             n += 1
-                            print_text(player.name + ' is lose!', w, h)
+                            print_text(player.name + ' is lose!', w, h, font_size=15)
                         elif isinstance(player, Player.Player):
                             n += 1
-                            print_text('You are lose!', w, h)
+                            print_text('You are lose!', w, h, font_size=15)
                 else:
                     if isinstance(player, Player.Bot):
                         n += 1
-                        print_text(player.name + ' is lose!', w, h)
+                        print_text(player.name + ' is lose!', w, h, font_size=15)
                     elif isinstance(player, Player.Player):
                         n += 1
-                        print_text('You are lose!', w, h)
+                        print_text('You are lose!', w, h, font_size=15)
         for player in self.players:
             draw_money(player)
         pygame.display.update()
