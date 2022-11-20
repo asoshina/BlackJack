@@ -1,7 +1,6 @@
-import pygame
 from Func import print_text
 from const import display
-import Game
+import pygame
 
 
 class Button:
@@ -32,7 +31,7 @@ class Button:
                     else:
                         action()
         self.draw_beautiful_rect(mouse[0], mouse[1], x, y)
-        print_text(message=message, x=x+10, y=y-5, font_size=font_size)
+        print_text(message=message, point=(x+10, y-5), font_size=font_size)
 
     def draw_beautiful_rect(self, ms_x, ms_y, x, y):
         if x <= ms_x < x + self.width and y < ms_y < y + self.height:

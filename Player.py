@@ -1,8 +1,5 @@
 import abc
 import random
-from const import MESSAGES, NAMES
-from Func import print_text
-from Func import is_int
 from func_draw import *
 
 
@@ -38,13 +35,16 @@ class AbstractPlayer(abc.ABC):
 
     def print_cards(self):
         if isinstance(self, Dealer):
-            draw_dealer_cards(self, True)
-        elif isinstance(self, Player):
-            draw_two_card(self)
+            draw_dealer_cards(self, -1)
+        else:
+            draw_card(self, 0)
+            pygame.display.flip()
+            pygame.time.delay(500)
+            draw_card(self, 1)
             draw_points(self)
-        elif isinstance(self, Bot):
-            draw_two_card(self)
-            draw_points(self)
+            pygame.display.flip()
+            pygame.time.delay(500)
+
 
 
 class Player(AbstractPlayer):
@@ -57,20 +57,21 @@ class Player(AbstractPlayer):
         while True:
             value = change_bet_draw()
             if value > self.money:
-                print_text('Your haven\'t enough money', display_width // 2 - 70, display_height // 2)
+                print_text('Your haven\'t enough money', (display_width // 2 - 70, display_height // 2))
             elif max_bet >= value >= min_bet and value <= self.money:
                 self.bet = value
                 self.money -= self.bet
                 break
             else:
-                print_text('Your bet is too big or too small', display_width // 2 - 70, display_height // 2)
+                print_text('Your bet is too big or too small', (display_width // 2 - 70, display_height // 2))
 
         draw_bot_bet(self)
         draw_money(self)
 
     def ask_card(self):
         while True:
-            print_text('One more card?', display_width // 2 - 50, display_height // 2 - 50)
+            clear(center, 410, 150)
+            print_text('One more card?', (display_width // 2 - 50, display_height // 2 - 50))
             result = draw_yes_no()
             if result:
                 return True
@@ -80,14 +81,11 @@ class Player(AbstractPlayer):
 
 class Bot(AbstractPlayer):
 
-    def __init__(self, index):
+    def __init__(self):
         super().__init__()
         self.max_points = random.randint(17, 20)
         self.name = 'Bot ' + random.choice(NAMES)
-        if index < 2:
-            self.index = index
-        else:
-            self.index = index + 1
+        self.index = 0
 
     def change_bet(self, max_bet, min_bet):
         if 0 < self.money < max_bet:
@@ -112,12 +110,14 @@ class Dealer(AbstractPlayer):
     def __init__(self):
         super().__init__()
         self.name = 'Dealer'
+        self.index = 6
 
     def change_bet(self, max_bet, min_bet):
-        """
-        NOTE: This type is Dealer so it has no bets
-        """""
-        raise Exception('This type is dealer so it has no bets')
+        # """
+        # NOTE: This type is Dealer so it has no bets
+        # """""
+        # raise Exception('This type is dealer so it has no bets')
+        pass
 
     def ask_card(self):
         if self.full_points < self.max_points:
